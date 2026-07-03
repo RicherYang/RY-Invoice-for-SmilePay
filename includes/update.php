@@ -18,7 +18,7 @@ final class RY_IFSMILEPAY_Update
         }
 
         if (version_compare($now_version, '2026.7.3', '<')) {
-            RY_IFSMILEPAY::update_option('version', RY_IFSMILEPAY_VERSION, true);
+            RY_IFSMILEPAY::update_option('version', '2026.7.3', true);
         }
     }
 }
