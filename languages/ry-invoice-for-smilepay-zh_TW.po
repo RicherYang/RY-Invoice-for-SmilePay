@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2026-06-29T20:45:49+08:00\n"
-"PO-Revision-Date: 2026-07-03 09:49+0800\n"
+"PO-Revision-Date: 2026-07-03 15:53+0800\n"
 "Language: zh_TW\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-KeywordsList: __;_e;esc_html_e;esc_html_x:1,2c;esc_html__;esc_attr_e;esc_attr_x:1,2c;esc_attr__;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;_x:1,2c;_n:1,2;_n_noop:1,2;__ngettext:1,2;__ngettext_noop:1,2;_c,_nc:4c,1,2\n"
@@ -208,14 +208,6 @@ msgstr "發票資訊"
 msgid "Base options"
 msgstr "基本設定"
 
-#: woocommerce/admin/settings/settings-invoice.php:88
-msgid "Order no prefix"
-msgstr "訂單編號前綴字"
-
-#: woocommerce/admin/settings/settings-invoice.php:91
-msgid "The prefix string of order no. Only letters and numbers allowed."
-msgstr "訂單編號前綴字符串。只允許使用英文字母與數字。"
-
 #: woocommerce/admin/settings/settings-invoice.php:19
 msgid "Show invoice number"
 msgstr "顯示發票號碼"
@@ -297,7 +289,7 @@ msgstr "折價"
 
 #: woocommerce/admin/settings/settings-invoice.php:96
 msgid "Custom track code"
-msgstr "自訂字軌代號"
+msgstr "指定字軌代號"
 
 #: woocommerce/admin/invoice.php:62
 msgid "Issue invoice.<br>Please wait."
@@ -452,10 +444,6 @@ msgstr "啓用記錄"
 msgid "Customer"
 msgstr "消費者"
 
-#: woocommerce/admin/settings/invoice.php:53
-msgid "Order no prefix only letters and numbers allowed, and maximum length is 3 characters."
-msgstr "訂單編號前綴只允許使用英文字母與數字，且不得超過 3 個字元。"
-
 #. Description of the plugin
 #: ry-invoice-for-smilepay.php
 msgid "Smilepay E-invoice, support WooCommerce."
@@ -498,3 +486,15 @@ msgstr "<strong>注意</strong>：紀錄可能包含個人資料。"
 #, php-format
 msgid "Log file %s"
 msgstr "紀錄檔 %s"
+
+#: woocommerce/admin/settings/settings-invoice.php:88
+msgid "Trade no prefix"
+msgstr "交易編號前綴字"
+
+#: woocommerce/admin/settings/settings-invoice.php:91
+msgid "The prefix string of trade no. Only letters and numbers allowed."
+msgstr "交易編號前綴字符串。只允許使用英文字母與數字。"
+
+#: woocommerce/admin/settings/invoice.php:51
+msgid "Trade no prefix only letters and numbers allowed, and maximum length is 3 characters."
+msgstr "交易編號前綴字只允許使用英文字母與數字，且不得超過 3 個字元。"

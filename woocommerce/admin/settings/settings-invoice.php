@@ -85,10 +85,10 @@ return [
         ],
     ],
     [
-        'title' => __('Order no prefix', 'ry-invoice-for-smilepay'),
+        'title' => __('Trade no prefix', 'ry-invoice-for-smilepay'),
         'id' => RY_IFSMILEPAY::OPTION_PREFIX . 'prefix',
         'type' => 'text',
-        'desc' => __('The prefix string of order no. Only letters and numbers allowed.', 'ry-invoice-for-smilepay'),
+        'desc' => __('The prefix string of trade no. Only letters and numbers allowed.', 'ry-invoice-for-smilepay'),
         'desc_tip' => true,
         'autoload' => false,
     ],
