@@ -9,7 +9,7 @@ final class RY_IFSMILEPAY_Admin_Page_Option extends RY_Abstract_Admin_Page
     public static function init_menu(): void
     {
         add_filter('ry-invoice-navs', [__CLASS__, 'add_nav']);
-        add_submenu_page('', __('Smilepay options', 'ry-invoice-for-smilepay'), '', 'manage_options', 'ry-invoice-smilepay-option', [__CLASS__, 'pre_show_page']);
+        add_submenu_page('', __('SmilePay options', 'ry-invoice-for-smilepay'), '', 'manage_options', 'ry-invoice-smilepay-option', [__CLASS__, 'pre_show_page']);
         add_action('load-admin_page_ry-invoice-smilepay-option', [__CLASS__, 'instance']);
         add_action('admin_post_ry-invoice-smilepay-option', [__CLASS__, 'admin_action']);
     }
@@ -17,7 +17,7 @@ final class RY_IFSMILEPAY_Admin_Page_Option extends RY_Abstract_Admin_Page
     public static function add_nav(array $navs): array
     {
         $navs[] = [
-            'name' => __('Smilepay options', 'ry-invoice-for-smilepay'),
+            'name' => __('SmilePay options', 'ry-invoice-for-smilepay'),
             'slug' => 'ry-invoice-smilepay-option',
         ];
 

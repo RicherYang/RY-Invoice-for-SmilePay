@@ -4,7 +4,7 @@
 /**
  * This template can be overridden by copying it to yourtheme/woocommerce/checkout/form-invoice.php
  *
- * HOWEVER, on occasion RY Invoice for Smilepay to your theme to
+ * HOWEVER, on occasion RY Invoice for SmilePay to your theme to
  * maintain compatibility. We try to do this as little as possible, but it does
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.

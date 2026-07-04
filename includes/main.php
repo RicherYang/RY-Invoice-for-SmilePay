@@ -8,7 +8,7 @@ final class RY_IFSMILEPAY extends RY_Abstract_Basic
 {
     public const OPTION_PREFIX = 'RY_IFSMILEPAY_';
 
-    public const PLUGIN_NAME = 'RY Invoice for Smilepay';
+    public const PLUGIN_NAME = 'RY Invoice for SmilePay';
 
     protected static ?self $_instance = null;
 

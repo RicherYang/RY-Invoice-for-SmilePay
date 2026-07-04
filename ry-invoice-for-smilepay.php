@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Plugin Name: RY Invoice for Smilepay
+ * Plugin Name: RY Invoice for SmilePay
  * Plugin URI: https://ry-plugin.com/ry-invoice-for-smilepay
- * Description: Smilepay E-invoice, support WooCommerce.
- * Version: 2026.7.3
+ * Description: SmilePay E-invoice, support WooCommerce.
+ * Version: 2026.7.4
  * Requires at least: 6.8
  * Requires PHP: 8.2
  * Author: Richer Yang
@@ -18,7 +18,7 @@
 
 defined('ABSPATH') or exit;
 
-define('RY_IFSMILEPAY_VERSION', '2026.7.3');
+define('RY_IFSMILEPAY_VERSION', '2026.7.4');
 define('RY_IFSMILEPAY_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('RY_IFSMILEPAY_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('RY_IFSMILEPAY_PLUGIN_BASENAME', plugin_basename(__FILE__));

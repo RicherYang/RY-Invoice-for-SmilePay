@@ -1,7 +1,7 @@
 {
     "name": "ry-invoice-for-smilepay",
-    "title": "RY Invoice for Smilepay",
-    "version": "2026.7.3",
+    "title": "RY Invoice for SmilePay",
+    "version": "2026.7.4",
     "author": "Richer Yang",
     "private": true,
     "devDependencies": {

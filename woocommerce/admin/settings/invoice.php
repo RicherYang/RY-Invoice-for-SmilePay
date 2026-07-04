@@ -28,10 +28,10 @@ final class RY_IFSMILEPAY_WC_Admin_Setting_Invoice
         if (isset($sections['tools'])) {
             $add_idx = array_search('tools', array_keys($sections));
             $sections = array_slice($sections, 0, $add_idx) + [
-                'smilepay_invoice' => __('Smilepay invoice', 'ry-invoice-for-smilepay'),
+                'smilepay_invoice' => __('SmilePay invoice', 'ry-invoice-for-smilepay'),
             ] + array_slice($sections, $add_idx);
         } else {
-            $sections['smilepay_invoice'] = __('Smilepay invoice', 'ry-invoice-for-smilepay');
+            $sections['smilepay_invoice'] = __('SmilePay invoice', 'ry-invoice-for-smilepay');
         }
 
         return $sections;

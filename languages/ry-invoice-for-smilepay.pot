@@ -2,7 +2,7 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: RY Invoice for Smilepay 2026.7.3\n"
+"Project-Id-Version: RY Invoice for SmilePay 2026.7.4\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ry-invoice-for-smilepay\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,7 +15,7 @@ msgstr ""
 
 #. Plugin Name of the plugin
 #: ry-invoice-for-smilepay.php
-msgid "RY Invoice for Smilepay"
+msgid "RY Invoice for SmilePay"
 msgstr ""
 
 #. Plugin URI of the plugin
@@ -25,7 +25,7 @@ msgstr ""
 
 #. Description of the plugin
 #: ry-invoice-for-smilepay.php
-msgid "Smilepay E-invoice, support WooCommerce."
+msgid "SmilePay E-invoice, support WooCommerce."
 msgstr ""
 
 #. Author of the plugin
@@ -61,23 +61,11 @@ msgid "General options"
 msgstr ""
 
 #: admin/page/html/general.php:9
-msgid "Amount abnormal mode"
+msgid "Item count precision"
 msgstr ""
 
-#: admin/page/html/general.php:12
-msgid "No action"
-msgstr ""
-
-#: admin/page/html/general.php:13
-msgid "Add one product to match order amount"
-msgstr ""
-
-#: admin/page/html/general.php:14
-msgid "Change order total amount"
-msgstr ""
-
-#: admin/page/html/general.php:19
-msgid "Fix amount product name"
+#: admin/page/html/general.php:23
+msgid "Item amount precision"
 msgstr ""
 
 #: admin/page/html/option.php:5
@@ -126,7 +114,7 @@ msgstr ""
 
 #: admin/page/option.php:12
 #: admin/page/option.php:20
-msgid "Smilepay options"
+msgid "SmilePay options"
 msgstr ""
 
 #: includes/functions.php:10
@@ -174,24 +162,12 @@ msgctxt "carruer type"
 msgid "phone_barcode"
 msgstr ""
 
-#: includes/invoice.php:60
+#: includes/invoice.php:61
 msgid "Customer"
 msgstr ""
 
-#: includes/invoice.php:130
-#: woocommerce/invoice.php:300
-#: woocommerce/invoice.php:312
-#: woocommerce/invoice.php:324
-#: woocommerce/invoice.php:333
-msgid "parcel"
-msgstr ""
-
-#: includes/invoice.php:186
+#: includes/invoice.php:171
 msgid "Order cancel"
-msgstr ""
-
-#: includes/invoice.php:213
-msgid "Discount"
 msgstr ""
 
 #: includes/ry-general/html/log-info.php:58
@@ -334,7 +310,7 @@ msgstr ""
 
 #: woocommerce/admin/settings/invoice.php:31
 #: woocommerce/admin/settings/invoice.php:34
-msgid "Smilepay invoice"
+msgid "SmilePay invoice"
 msgstr ""
 
 #: woocommerce/admin/settings/invoice.php:51
@@ -487,10 +463,17 @@ msgstr ""
 msgid "Invalid invoice error: %1$s (%2$s)"
 msgstr ""
 
-#: woocommerce/invoice.php:321
+#: woocommerce/invoice.php:318
+#: woocommerce/invoice.php:331
+#: woocommerce/invoice.php:344
+#: woocommerce/invoice.php:354
+msgid "parcel"
+msgstr ""
+
+#: woocommerce/invoice.php:341
 msgid "shipping fee"
 msgstr ""
 
-#: woocommerce/invoice.php:330
+#: woocommerce/invoice.php:351
 msgid "return fee"
 msgstr ""

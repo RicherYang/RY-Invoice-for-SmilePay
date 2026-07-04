@@ -52,10 +52,11 @@ final class RY_IFSMILEPAY_Invoice extends RY_IFSMILEPAY_Abstract_Invoice
             'ProductTaxType' => [],
             'Amount' => [],
             'AllAmount' => round($invoice_data['total'], 0),
-            'SalesAmount' => round($invoice_data['total'], 0),
+            'SalesAmount' => 0,
             'FreeTaxSalesAmount' => 0,
             'ZeroTaxSalesAmount' => 0,
-            'TaxAmount' => -1,
+            'UnitTAX' => 'Y',
+            'TaxAmount' => 0,
 
             'Name' => __('Customer', 'ry-invoice-for-smilepay'),
             'Address' => $invoice_data['address'],
@@ -66,7 +67,7 @@ final class RY_IFSMILEPAY_Invoice extends RY_IFSMILEPAY_Abstract_Invoice
         ];
 
         switch ($invoice_data['type']) {
-            case 'smilepay_host':
+            case 'host':
                 $post_args['CarrierType'] = 'EJ0113';
                 break;
             case 'MOICA':
@@ -78,9 +79,7 @@ final class RY_IFSMILEPAY_Invoice extends RY_IFSMILEPAY_Abstract_Invoice
                 $post_args['CarrierID'] = $invoice_data['phone_barcode'];
                 break;
             case 'company':
-                $post_args['SalesAmount'] = round($post_args['AllAmount'] / 1.05, 0);
-                $post_args['TaxAmount'] = $post_args['AllAmount'] - $post_args['SalesAmount'];
-                $post_args['UnitTAX'] = 'Y';
+                $post_args['UnitTAX'] = 'N';
                 $post_args['Buyer_id'] = $invoice_data['tax_no'];
                 $post_args['CompanyName'] = $invoice_data['tax_name'];
                 if (empty($post_args['CompanyName'])) {
@@ -103,46 +102,32 @@ final class RY_IFSMILEPAY_Invoice extends RY_IFSMILEPAY_Abstract_Invoice
 
             $name = mb_strimwidth(str_replace('|', '', strip_tags($invoice_item['name'])), 0, 80, '');
             $unit = mb_strimwidth(str_replace('|', '', strip_tags($invoice_item['unit'])), 0, 6, '');
-            $qty = round($invoice_item['qty'], 3);
-            $unit_price = round($invoice_item['total'] / $qty, 6);
-            $total = round($qty * $unit_price, 0);
+            $qty = round($invoice_item['qty'], $general_info['count_precision']);
+            $total = $invoice_item['total'];
+            if ($post_args['UnitTAX'] === 'N') {
+                $total = round($total / 1.05, 0);
+                $unit_price = round($total / $qty, $general_info['count_precision']);
+                $total = round($unit_price * $qty, $general_info['count_precision']);
+            } else {
+                $unit_price = round($total / $qty, $general_info['count_precision']);
+                $total = round($unit_price * $qty, $general_info['count_precision']);
+            }
 
+            match($invoice_item['tax']) {
+                1 => $post_args['SalesAmount'] += $total,
+            };
             $post_args['Description'][] = $name;
             $post_args['Quantity'][] = $qty;
             $post_args['UnitPrice'][] = $unit_price;
             $post_args['Unit'][] = $unit;
-            $post_args['ProductTaxType'][] = 1;
+            $post_args['ProductTaxType'][] = $invoice_item['tax'];
             $post_args['Amount'][] = $total;
         }
 
-        $item_total = array_sum($post_args['Amount']);
-        if ($item_total !== $post_args['AllAmount']) {
-            switch ($general_info['abnormal_mode']) {
-                case 'order':
-                    $post_args['AllAmount'] = $item_total;
-                    if ($post_args['TaxAmount'] !== -1) {
-                        $post_args['SalesAmount'] = round($post_args['AllAmount'] / 1.05, 0);
-                        $post_args['TaxAmount'] = $post_args['AllAmount'] - $post_args['SalesAmount'];
-                    }
-                    break;
-                case 'product':
-                    $name = mb_strimwidth(str_replace('|', '', strip_tags($general_info['abnormal_product'])), 0, 80, '');
-                    $unit = apply_filters('ry_invoice-item_unit_name', __('parcel', 'ry-invoice-for-smilepay'), $object_ID, 'abnormal');
-                    $unit = mb_strimwidth(str_replace('|', '', $unit), 0, 6, '');
+        $post_args['SalesAmount'] = round($post_args['SalesAmount'], 0);
+        $amount = round($post_args['SalesAmount'] + $post_args['FreeTaxSalesAmount'] + $post_args['ZeroTaxSalesAmount'], 0);
+        $post_args['TaxAmount'] = $post_args['AllAmount'] - $amount;
 
-                    $post_args['Description'][] = $name;
-                    $post_args['Quantity'][] = 1;
-                    $post_args['UnitPrice'][] = $post_args['TotalAmount'] - $item_total;
-                    $post_args['Unit'][] = $unit;
-                    $post_args['ProductTaxType'][] = 1;
-                    $post_args['Amount'][] = $post_args['TotalAmount'] - $item_total;
-                    break;
-            }
-        }
-
-        if ($post_args['TaxAmount'] === -1) {
-            $post_args['TaxAmount'] = 0;
-        }
         $post_args['MainRemark'] = apply_filters('ry_invoice-main_remark', $post_args['MainRemark'], $object_ID);
         $post_args['MainRemark'] = mb_strimwidth(strip_tags($post_args['MainRemark']), 0, 200, '');
 
@@ -208,10 +193,14 @@ final class RY_IFSMILEPAY_Invoice extends RY_IFSMILEPAY_Abstract_Invoice
             $general_info = [];
         }
 
-        return array_merge([
-            'abnormal_mode' => '',
-            'abnormal_product' => __('Discount', 'ry-invoice-for-smilepay'),
+        $general_info = array_merge([
+            'count_precision' => 3,
+            'amount_precision' => 7,
         ], $general_info);
+        $general_info['count_precision'] = (int) $general_info['count_precision'];
+        $general_info['amount_precision'] = (int) $general_info['amount_precision'];
+
+        return $general_info;
     }
 
     public function get_api_info()
