@@ -59,7 +59,7 @@ final class RY_IFSMILEPAY_Invoice extends RY_IFSMILEPAY_Abstract_Invoice
             'TaxAmount' => 0,
 
             'Name' => __('Customer', 'ry-invoice-for-smilepay'),
-            'Address' => $invoice_data['address'],
+            'Address' => __('Taiwan', 'ry-invoice-for-smilepay'),
             'Email' => $invoice_data['email'],
             'CarrierType' => '',
             'CarrierID' => '',
