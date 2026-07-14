@@ -21,19 +21,18 @@ final class RY_IFSMILEPAY_LinkServer extends RY_Abstract_Link_Server
 
     protected function get_base_info(): array
     {
-        return [
+        $info = [
             'plugin' => RY_IFSMILEPAY_VERSION,
             'php' => PHP_VERSION,
             'wp' => get_bloginfo('version'),
         ];
-    }
+        if (defined('WC_VERSION')) {
+            $info['wc'] = WC_VERSION;
+        }
+        if (defined('TUTOR_VERSION')) {
+            $info['tt'] = TUTOR_VERSION;
+        }
 
-    protected function get_user_agent()
-    {
-        return sprintf(
-            'RY_IFSMILEPAY %s (WordPress/%s)',
-            RY_IFSMILEPAY_VERSION,
-            get_bloginfo('version'),
-        );
+        return $info;
     }
 }
