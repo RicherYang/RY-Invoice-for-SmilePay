@@ -6,7 +6,7 @@ use RY\General\Logs;
 
 final class RY_IFSMILEPAY_Invoice extends RY_IFSMILEPAY_Abstract_Invoice
 {
-    protected static ?self $_instance = null;
+    private static ?self $_instance = null;
 
     private array $api_test_url = [
         'get' => 'https://ssl.smse.com.tw/api_test/SPEinvoice_Storage.asp',

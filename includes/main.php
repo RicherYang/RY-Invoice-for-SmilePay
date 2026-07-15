@@ -11,7 +11,7 @@ final class RY_IFSMILEPAY extends AbstractBasic
 
     public const PLUGIN_NAME = 'RY Invoice for SmilePay';
 
-    protected static ?self $_instance = null;
+    private static ?self $_instance = null;
 
     public static function instance(): RY_IFSMILEPAY
     {

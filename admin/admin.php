@@ -7,7 +7,7 @@ use RY\Paid\Page\License;
 
 final class RY_IFSMILEPAY_Admin extends AbstractAdmin
 {
-    protected static ?self $_instance = null;
+    private static ?self $_instance = null;
 
     protected RY_IFSMILEPAY_License $license;
 
