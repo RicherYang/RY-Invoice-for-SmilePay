@@ -4,6 +4,8 @@ defined('ABSPATH') or exit;
 
 use RY\General\AbstractBasic;
 use RY\General\Logs;
+use RY\Invoice\Smilepay\WooCommerce\Fields;
+use RY\Invoice\Smilepay\WooCommerce\Invoice;
 
 final class RY_IFSMILEPAY extends AbstractBasic
 {
@@ -60,12 +62,10 @@ final class RY_IFSMILEPAY extends AbstractBasic
         }
 
         if (has_action('woocommerce_init')) {
-            include_once RY_IFSMILEPAY_PLUGIN_DIR . 'woocommerce/invoice-basic.php';
-            RY_IFSMILEPAY_WC_Invoice_Basic::instance();
+            Fields::instance();
 
             if (RY_IFSMILEPAY_License::instance()->is_activated()) {
-                include_once RY_IFSMILEPAY_PLUGIN_DIR . 'woocommerce/invoice.php';
-                RY_IFSMILEPAY_WC_Invoice::instance();
+                Invoice::instance();
             }
         }
     }

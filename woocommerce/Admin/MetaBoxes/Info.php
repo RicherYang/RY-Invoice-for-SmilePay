@@ -1,6 +1,8 @@
 <?php
 
-final class RY_IFSMILEPAY_MetaBox_Invoice_Data
+namespace RY\Invoice\Smilepay\WooCommerce\Admin\MetaBoxes;
+
+final class Info
 {
     private static array $fields;
 
@@ -87,7 +89,7 @@ final class RY_IFSMILEPAY_MetaBox_Invoice_Data
             <?php switch ($invoice_number) {
                 case 'wait': ?>
             <strong><?php esc_html_e('Invoice number', 'ry-invoice-for-smilepay'); ?>:</strong> <?php esc_html_e('Wait get invoice', 'ry-invoice-for-smilepay'); ?><br>
-            <?php $next_time = as_next_scheduled_action(RY_IFSMILEPAY::OPTION_PREFIX . 'auto_get_invoice', [$order->get_id()], 'ry-invoice'); ?>
+            <?php $next_time = as_next_scheduled_action(\RY_IFSMILEPAY::OPTION_PREFIX . 'auto_get_invoice', [$order->get_id()], 'ry-invoice'); ?>
             <?php if ($next_time > 0) {
                 $next_time = as_get_datetime_object($next_time)->setTimezone(wp_timezone()); ?>
             <strong><?php esc_html_e('Expected get time', 'ry-invoice-for-smilepay'); ?>:</strong> <?php echo esc_html($next_time->format('Y-m-d H:i')); ?><br>

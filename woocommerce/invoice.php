@@ -1,14 +1,17 @@
 <?php
 
+namespace RY\Invoice\Smilepay\WooCommerce;
+
 defined('ABSPATH') or exit;
 
 use RY\General\Logs;
+use RY\Invoice\Smilepay\WooCommerce\Admin\Admin;
 
-final class RY_IFSMILEPAY_WC_Invoice
+final class Invoice
 {
     private static ?self $_instance = null;
 
-    public static function instance(): RY_IFSMILEPAY_WC_Invoice
+    public static function instance(): Invoice
     {
         if (null === self::$_instance) {
             self::$_instance = new self();
@@ -20,7 +23,7 @@ final class RY_IFSMILEPAY_WC_Invoice
 
     protected function do_init(): void
     {
-        $auto_get_statuses = match (RY_IFSMILEPAY::get_option('get_mode')) {
+        $auto_get_statuses = match (\RY_IFSMILEPAY::get_option('get_mode')) {
             'auto_paid' => wc_get_is_paid_statuses(),
             'auto_completed' => ['completed'],
             default => [],
@@ -29,7 +32,7 @@ final class RY_IFSMILEPAY_WC_Invoice
             add_action('woocommerce_order_status_' . $status, [$this, 'auto_get_invoice']);
         }
 
-        if (RY_IFSMILEPAY::get_option('invalid_mode') === 'auto_cancel') {
+        if (\RY_IFSMILEPAY::get_option('invalid_mode') === 'auto_cancel') {
             add_action('woocommerce_order_status_cancelled', [$this, 'auto_delete_invoice']);
             add_action('woocommerce_order_status_refunded', [$this, 'auto_delete_invoice']);
         }
@@ -38,14 +41,10 @@ final class RY_IFSMILEPAY_WC_Invoice
         add_action('ry_invoice_smilepay-post_invalid_invoice', [$this, 'do_delete_invoice'], 0, 3);
 
         if (is_admin()) {
-            include_once RY_IFSMILEPAY_PLUGIN_DIR . 'woocommerce/admin/admin.php';
-            RY_IFSMILEPAY_WC_Admin::instance();
-
-            include_once RY_IFSMILEPAY_PLUGIN_DIR . 'woocommerce/admin/invoice.php';
-            RY_IFSMILEPAY_WC_Admin_Invoice::instance();
+            Admin::instance();
         } else {
             add_filter('default_checkout_invoice_company_name', [$this, 'set_default_invoice_company_name']);
-            if (RY_IFSMILEPAY::get_option('show_invoice_number', 'no') === 'yes') {
+            if (\RY_IFSMILEPAY::get_option('show_invoice_number', 'no') === 'yes') {
                 add_filter('woocommerce_account_orders_columns', [$this, 'add_invoice_column']);
                 add_action('woocommerce_my_account_my_orders_column_invoice-number', [$this, 'show_invoice_column']);
             }
@@ -68,7 +67,7 @@ final class RY_IFSMILEPAY_WC_Invoice
             }
         }
 
-        if (RY_IFSMILEPAY::get_option('skip_foreign_order', 'no') === 'yes') {
+        if (\RY_IFSMILEPAY::get_option('skip_foreign_order', 'no') === 'yes') {
             if ('TW' !== $order->get_billing_country()) {
                 if ($order->needs_shipping_address()) {
                     if ('TW' !== $order->get_shipping_country()) {
@@ -84,8 +83,8 @@ final class RY_IFSMILEPAY_WC_Invoice
             return;
         }
 
-        if (!as_has_scheduled_action(RY_IFSMILEPAY::OPTION_PREFIX . 'auto_get_invoice', [$order->get_id()], 'ry-invoice')) {
-            $delay_time = (int) RY_IFSMILEPAY::get_option('get_delay_time', '0');
+        if (!as_has_scheduled_action(\RY_IFSMILEPAY::OPTION_PREFIX . 'auto_get_invoice', [$order->get_id()], 'ry-invoice')) {
+            $delay_time = (int) \RY_IFSMILEPAY::get_option('get_delay_time', '0');
             if ($delay_time < 0) {
                 $delay_time = 0;
             }
@@ -94,7 +93,7 @@ final class RY_IFSMILEPAY_WC_Invoice
             }
             $order->update_meta_data('_invoice_number', 'wait');
             $order->save();
-            as_schedule_single_action(time() + MINUTE_IN_SECONDS * 2 + HOUR_IN_SECONDS * $delay_time, RY_IFSMILEPAY::OPTION_PREFIX . 'auto_get_invoice', [$order->get_id()], 'ry-invoice');
+            as_schedule_single_action(time() + MINUTE_IN_SECONDS * 2 + HOUR_IN_SECONDS * $delay_time, \RY_IFSMILEPAY::OPTION_PREFIX . 'auto_get_invoice', [$order->get_id()], 'ry-invoice');
         }
     }
 
@@ -113,12 +112,12 @@ final class RY_IFSMILEPAY_WC_Invoice
             case 'wait':
             case 'zero':
             case 'negative':
-                as_unschedule_action(RY_IFSMILEPAY::OPTION_PREFIX . 'auto_get_invoice', [$order->get_id()], 'ry-invoice');
+                as_unschedule_action(\RY_IFSMILEPAY::OPTION_PREFIX . 'auto_get_invoice', [$order->get_id()], 'ry-invoice');
                 $order->delete_meta_data('_invoice_number');
                 $order->save();
                 break;
             default:
-                as_schedule_single_action(time() + MINUTE_IN_SECONDS * 2, RY_IFSMILEPAY::OPTION_PREFIX . 'auto_invalid_invoice', [$order->get_id()], 'ry-invoice');
+                as_schedule_single_action(time() + MINUTE_IN_SECONDS * 2, \RY_IFSMILEPAY::OPTION_PREFIX . 'auto_invalid_invoice', [$order->get_id()], 'ry-invoice');
                 break;
         }
     }
@@ -145,7 +144,7 @@ final class RY_IFSMILEPAY_WC_Invoice
             return;
         }
 
-        $invoice_date = new DateTime((string) $result->InvoiceDate . ' ' . (string) $result->InvoiceTime, new DateTimeZone('Asia/Taipei'));
+        $invoice_date = new \DateTime((string) $result->InvoiceDate . ' ' . (string) $result->InvoiceTime, new \DateTimeZone('Asia/Taipei'));
         $invoice_date->setTimezone(wp_timezone());
 
         if (apply_filters('ry_invoice-wc_success_notice', true)) {
@@ -194,7 +193,7 @@ final class RY_IFSMILEPAY_WC_Invoice
     public function set_default_invoice_company_name()
     {
         if (is_user_logged_in()) {
-            $customer = new WC_Customer(get_current_user_id(), true);
+            $customer = new \WC_Customer(get_current_user_id(), true);
 
             return $customer->get_billing_company();
         }
@@ -240,8 +239,8 @@ final class RY_IFSMILEPAY_WC_Invoice
 
         $invoice_data = [
             'no' => $order->get_order_number(),
-            'prefix' => RY_IFSMILEPAY::get_option('prefix', ''),
-            'trackcode' => RY_IFSMILEPAY::get_option('trackcode', ''),
+            'prefix' => \RY_IFSMILEPAY::get_option('prefix', ''),
+            'trackcode' => \RY_IFSMILEPAY::get_option('trackcode', ''),
             'email' => $order->get_billing_email(),
             'total' => $order->get_total() - $order->get_total_refunded(),
         ];
@@ -263,21 +262,21 @@ final class RY_IFSMILEPAY_WC_Invoice
             case 'personal':
                 switch ($order->get_meta('_invoice_carruer_type')) {
                     case 'amego_host':
-                        $order = wc_get_order();
                         $order->update_meta_data('_invoice_carruer_type', 'smilepay_host');
                         $order->save();
+                        $order = wc_get_order($order->get_id());
                         $invoice_data['type'] = 'host';
                         break;
                     case 'ecpay_host':
-                        $order = wc_get_order();
                         $order->update_meta_data('_invoice_carruer_type', 'smilepay_host');
                         $order->save();
+                        $order = wc_get_order($order->get_id());
                         $invoice_data['type'] = 'host';
                         break;
                     case 'ezpay_host':
-                        $order = wc_get_order();
                         $order->update_meta_data('_invoice_carruer_type', 'smilepay_host');
                         $order->save();
+                        $order = wc_get_order($order->get_id());
                         $invoice_data['type'] = 'host';
                         break;
                     case 'smilepay_host':
@@ -361,7 +360,7 @@ final class RY_IFSMILEPAY_WC_Invoice
         }
 
         Logs::log('smilepay-invoice', 'info', 'Get WooCommerce #' . $order->get_id(), $invoice_data);
-        RY_IFSMILEPAY_Invoice::instance()->get_invoice($invoice_data, $order->get_id());
+        \RY_IFSMILEPAY_Invoice::instance()->get_invoice($invoice_data, $order->get_id());
     }
 
     public function cancel_invoice($order)
@@ -388,6 +387,6 @@ final class RY_IFSMILEPAY_WC_Invoice
             'date' => $order->get_meta('_invoice_date'),
         ];
         Logs::log('smilepay-invoice', 'info', 'Invalid WooCommerce #' . $order->get_id(), $invoice_data);
-        RY_IFSMILEPAY_Invoice::instance()->invalid_invoice($invoice_data, $order->get_id());
+        \RY_IFSMILEPAY_Invoice::instance()->invalid_invoice($invoice_data, $order->get_id());
     }
 }

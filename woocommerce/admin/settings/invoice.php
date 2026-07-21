@@ -1,12 +1,14 @@
 <?php
 
+namespace RY\Invoice\SmilePay\WooCommerce\Admin\Settings;
+
 defined('ABSPATH') or exit;
 
-final class RY_IFSMILEPAY_WC_Admin_Setting_Invoice
+final class Invoice
 {
     private static ?self $_instance = null;
 
-    public static function instance(): RY_IFSMILEPAY_WC_Admin_Setting_Invoice
+    public static function instance(): Invoice
     {
         if (null === self::$_instance) {
             self::$_instance = new self();
@@ -40,16 +42,119 @@ final class RY_IFSMILEPAY_WC_Admin_Setting_Invoice
     public function add_setting($settings, $current_section)
     {
         if ($current_section === 'smilepay_invoice') {
-            $settings = include RY_IFSMILEPAY_PLUGIN_DIR . 'woocommerce/admin/settings/settings-invoice.php';
+            $order_statuses = wc_get_order_statuses();
+            $paid_status = [];
+            foreach (wc_get_is_paid_statuses() as $status) {
+                $paid_status[] = $order_statuses['wc-' . $status];
+            }
+            $paid_status = implode(', ', $paid_status);
+
+            $settings = [
+                [
+                    'title' => __('Base options', 'ry-invoice-for-smilepay'),
+                    'id' => 'base_options',
+                    'type' => 'title',
+                ],
+                [
+                    'title' => __('Show invoice number', 'ry-invoice-for-smilepay'),
+                    'id' => \RY_IFSMILEPAY::OPTION_PREFIX . 'show_invoice_number',
+                    'type' => 'checkbox',
+                    'default' => 'no',
+                    'desc' => __('Show invoice number in Frontend order list', 'ry-invoice-for-smilepay'),
+                ],
+                [
+                    'title' => __('Move billing company', 'ry-invoice-for-smilepay'),
+                    'id' => \RY_IFSMILEPAY::OPTION_PREFIX . 'move_billing_company',
+                    'type' => 'checkbox',
+                    'default' => 'no',
+                    'desc' => __('Move billing company to invoice area', 'ry-invoice-for-smilepay'),
+                ],
+                [
+                    'id' => 'base_options',
+                    'type' => 'sectionend',
+                ],
+                [
+                    'title' => __('Invoice options', 'ry-invoice-for-smilepay'),
+                    'id' => 'invoice_options',
+                    'type' => 'title',
+                ],
+                [
+                    'title' => __('Get mode', 'ry-invoice-for-smilepay'),
+                    'id' => \RY_IFSMILEPAY::OPTION_PREFIX . 'get_mode',
+                    'type' => 'select',
+                    'default' => 'manual',
+                    'options' => [
+                        'manual' => _x('manual', 'get mode', 'ry-invoice-for-smilepay'),
+                        'auto_paid' => _x('auto ( when order paid )', 'get mode', 'ry-invoice-for-smilepay'),
+                        'auto_completed' => _x('auto ( when order completed )', 'get mode', 'ry-invoice-for-smilepay'),
+                    ],
+                    'desc' => sprintf(
+                        /* translators: %s: paid status */
+                        __('Order paid status: %s', 'ry-invoice-for-smilepay'),
+                        $paid_status,
+                    ),
+                ],
+                [
+                    'title' => __('Skip foreign orders', 'ry-invoice-for-smilepay'),
+                    'id' => \RY_IFSMILEPAY::OPTION_PREFIX . 'skip_foreign_order',
+                    'type' => 'checkbox',
+                    'default' => 'no',
+                    'desc' => __('Disable auto get invoice for order billing country and shipping country are not in Taiwan.', 'ry-invoice-for-smilepay'),
+                    'autoload' => false,
+                ],
+                [
+                    'title' => __('Delay time (hours)', 'ry-invoice-for-smilepay'),
+                    'id' => \RY_IFSMILEPAY::OPTION_PREFIX . 'get_delay_time',
+                    'type' => 'number',
+                    'default' => '0',
+                    'custom_attributes' => [
+                        'min' => '0',
+                        'max' => '336',
+                        'step' => '1',
+                    ],
+                    'desc' => __('After N hours get invoice.', 'ry-invoice-for-smilepay')
+                        . __('According to WordPress cron job, the actual execution time will be later than the specified time.', 'ry-invoice-for-smilepay'),
+                    'autoload' => false,
+                ],
+                [
+                    'title' => __('Invalid mode', 'ry-invoice-for-smilepay'),
+                    'id' => \RY_IFSMILEPAY::OPTION_PREFIX . 'invalid_mode',
+                    'type' => 'select',
+                    'default' => 'manual',
+                    'options' => [
+                        'manual' => _x('manual', 'invalid mode', 'ry-invoice-for-smilepay'),
+                        'auto_cancel' => _x('auto ( when order status cancelled OR refunded )', 'invalid mode', 'ry-invoice-for-smilepay'),
+                    ],
+                ],
+                [
+                    'title' => __('Trade no prefix', 'ry-invoice-for-smilepay'),
+                    'id' => \RY_IFSMILEPAY::OPTION_PREFIX . 'prefix',
+                    'type' => 'text',
+                    'desc' => __('The prefix string of trade no. Only letters and numbers allowed.', 'ry-invoice-for-smilepay'),
+                    'desc_tip' => true,
+                    'autoload' => false,
+                ],
+                [
+                    'title' => __('Custom track code', 'ry-invoice-for-smilepay'),
+                    'id' => \RY_IFSMILEPAY::OPTION_PREFIX . 'trackcode',
+                    'type' => 'text',
+                    'default' => '',
+                    'autoload' => false,
+                ],
+                [
+                    'id' => 'invoice_options',
+                    'type' => 'sectionend',
+                ],
+            ];
         }
         return $settings;
     }
 
     public function check_option()
     {
-        if (!preg_match('/^[a-z0-9]{0,3}$/i', RY_IFSMILEPAY::get_option('prefix', ''))) {
-            WC_Admin_Settings::add_error(__('Trade no prefix only letters and numbers allowed, and maximum length is 3 characters.', 'ry-invoice-for-smilepay'));
-            RY_IFSMILEPAY::update_option('prefix', '', false);
+        if (!preg_match('/^[a-z0-9]{0,3}$/i', \RY_IFSMILEPAY::get_option('prefix', ''))) {
+            \WC_Admin_Settings::add_error(__('Trade no prefix only letters and numbers allowed, and maximum length is 3 characters.', 'ry-invoice-for-smilepay'));
+            \RY_IFSMILEPAY::update_option('prefix', '', false);
         }
     }
 }

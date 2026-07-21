@@ -1,14 +1,17 @@
 <?php
 
+namespace RY\Invoice\Smilepay\WooCommerce\Admin;
+
 defined('ABSPATH') or exit;
 
 use Automattic\WooCommerce\Utilities\OrderUtil;
+use RY\Invoice\Smilepay\WooCommerce\Invoice;
 
-final class RY_IFSMILEPAY_WC_Admin_Invoice
+final class Order
 {
     private static ?self $_instance = null;
 
-    public static function instance(): RY_IFSMILEPAY_WC_Admin_Invoice
+    public static function instance(): Order
     {
         if (null === self::$_instance) {
             self::$_instance = new self();
@@ -20,13 +23,7 @@ final class RY_IFSMILEPAY_WC_Admin_Invoice
 
     protected function do_init(): void
     {
-        include_once RY_IFSMILEPAY_PLUGIN_DIR . 'woocommerce/admin/meta-boxes/class-wc-meta-box-invoice-data.php';
-        add_action('woocommerce_admin_order_data_after_billing_address', ['RY_IFSMILEPAY_MetaBox_Invoice_Data', 'output']);
-
-        include_once RY_IFSMILEPAY_PLUGIN_DIR . 'woocommerce/admin/settings/invoice.php';
-        RY_IFSMILEPAY_WC_Admin_Setting_Invoice::instance();
-
-        add_action('admin_enqueue_scripts', [$this, 'add_scripts'], 11);
+        add_action('woocommerce_admin_order_data_after_billing_address', ['RY\Invoice\Smilepay\WooCommerce\Admin\MetaBoxes\Info', 'output']);
 
         add_action('woocommerce_update_order', [$this, 'save_order_update']);
 
@@ -45,30 +42,6 @@ final class RY_IFSMILEPAY_WC_Admin_Invoice
 
             add_filter('bulk_actions-edit-shop_order', [$this, 'shop_order_list_action']);
             add_filter('handle_bulk_actions-edit-shop_order', [$this, 'do_shop_order_action'], 10, 3);
-        }
-    }
-
-    public function add_scripts()
-    {
-        $screen = get_current_screen();
-        $screen_id = $screen ? $screen->id : '';
-
-        if (in_array($screen_id, ['shop_order', 'edit-shop_order', 'woocommerce_page_wc-settings', 'woocommerce_page_wc-orders'])) {
-            wp_enqueue_script('ry-invoice-admin-invoice');
-            wp_enqueue_style('ry-invoice-admin-invoice');
-
-            wp_localize_script('ry-invoice-admin-invoice', 'RyWaiAdminInvoiceParams', [
-                'i18n' => [
-                    'get' => __('Issue invoice.<br>Please wait.', 'ry-invoice-for-smilepay'),
-                    'cancel' => __('Cancel get invoice.<br>Please wait.', 'ry-invoice-for-smilepay'),
-                    'invalid' => __('Invalid invoice.<br>Please wait.', 'ry-invoice-for-smilepay'),
-                ],
-                '_nonce' => [
-                    'get' => wp_create_nonce('get-invoice'),
-                    'cancel' => wp_create_nonce('cancel-invoice'),
-                    'invalid' => wp_create_nonce('invalid-invoice'),
-                ],
-            ]);
         }
     }
 
@@ -169,7 +142,7 @@ final class RY_IFSMILEPAY_WC_Admin_Invoice
                 $invoice_number = $order->get_meta('_invoice_number');
                 if (empty($invoice_number) && $order->is_paid()) {
                     $geted += 1;
-                    RY_IFSMILEPAY_WC_Invoice::instance()->get_invoice($order);
+                    Invoice::instance()->get_invoice($order);
                 }
             }
 

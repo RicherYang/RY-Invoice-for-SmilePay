@@ -1,14 +1,10 @@
 <?php
 
+namespace RY\Invoice\Smilepay\WooCommerce\Admin;
+
 defined('ABSPATH') or exit;
 
-if (class_exists('RY_IFSMILEPAY_WC_Admin_Settings', false)) {
-    if (!has_action('woocommerce_sections_rytools')) {
-        return new RY_IFSMILEPAY_WC_Admin_Settings();
-    }
-}
-
-final class RY_IFSMILEPAY_WC_Admin_Settings extends WC_Settings_Page
+final class Settings extends \WC_Settings_Page
 {
     public function __construct()
     {
@@ -33,7 +29,7 @@ final class RY_IFSMILEPAY_WC_Admin_Settings extends WC_Settings_Page
 
         if (apply_filters('ry_setting_section_' . $current_section, true)) {
             $settings = $this->get_settings($current_section);
-            WC_Admin_Settings::output_fields($settings);
+            \WC_Admin_Settings::output_fields($settings);
         } else {
             do_action('ry_setting_section_ouput_' . $current_section);
         }
@@ -49,7 +45,7 @@ final class RY_IFSMILEPAY_WC_Admin_Settings extends WC_Settings_Page
 
         if (apply_filters('ry_setting_section_' . $current_section, true)) {
             $settings = $this->get_settings($current_section);
-            WC_Admin_Settings::save_fields($settings);
+            \WC_Admin_Settings::save_fields($settings);
         }
 
         if ($current_section) {
@@ -67,8 +63,4 @@ final class RY_IFSMILEPAY_WC_Admin_Settings extends WC_Settings_Page
 
         return apply_filters('woocommerce_get_settings_' . $this->id, $settings, $current_section);
     }
-}
-
-if (!has_action('woocommerce_sections_rytools')) {
-    return new RY_IFSMILEPAY_WC_Admin_Settings();
 }

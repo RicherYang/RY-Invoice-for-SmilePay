@@ -1,12 +1,14 @@
 <?php
 
+namespace RY\Invoice\Smilepay\WooCommerce;
+
 defined('ABSPATH') or exit;
 
-final class RY_IFSMILEPAY_WC_Invoice_Basic
+final class Fields
 {
     private static ?self $_instance = null;
 
-    public static function instance(): RY_IFSMILEPAY_WC_Invoice_Basic
+    public static function instance(): Fields
     {
         if (null === self::$_instance) {
             self::$_instance = new self();
@@ -71,7 +73,7 @@ final class RY_IFSMILEPAY_WC_Invoice_Basic
             ],
         ];
 
-        if (RY_IFSMILEPAY::get_option('move_billing_company', 'no') === 'yes') {
+        if (\RY_IFSMILEPAY::get_option('move_billing_company', 'no') === 'yes') {
             unset($fields['billing']['billing_company']);
             $fields['invoice']['invoice_company_name'] = [
                 'label' => __('Company name', 'ry-invoice-for-smilepay'),
@@ -202,7 +204,7 @@ final class RY_IFSMILEPAY_WC_Invoice_Basic
                 $order->delete_meta_data('_' . $key);
             }
         }
-        if (RY_IFSMILEPAY::get_option('move_billing_company', 'no') === 'yes') {
+        if (\RY_IFSMILEPAY::get_option('move_billing_company', 'no') === 'yes') {
             $order->set_billing_company($data['invoice_company_name'] ?? '');
         }
     }
