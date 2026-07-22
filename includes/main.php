@@ -3,6 +3,7 @@
 defined('ABSPATH') or exit;
 
 use RY\General\AbstractBasic;
+use RY\General\ActionScheduler;
 use RY\General\Logs;
 use RY\Invoice\Smilepay\Admin\Admin;
 use RY\Invoice\Smilepay\Cron;
@@ -34,6 +35,7 @@ final class RY_IFSMILEPAY extends AbstractBasic
     {
         load_plugin_textdomain('ry-invoice-for-smilepay', false, plugin_basename(dirname(__DIR__)) . '/languages');
         include_once RY_IFSMILEPAY_PLUGIN_DIR . 'includes/vendor/woocommerce/action-scheduler/action-scheduler.php';
+        ActionScheduler::instance();
 
         Logs::set_log(RY_IFSMILEPAY::get_option('log', 'no') === 'yes', 'smilepay-invoice');
 

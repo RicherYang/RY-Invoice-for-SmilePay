@@ -43,12 +43,12 @@ final class Option extends AbstractAdminPage
         echo '<div class="wrap">';
 
         $show_type = 'ry-invoice-smilepay-option';
-        include RY_IFSMILEPAY_PLUGIN_DIR . 'admin/page/html/nav.php';
+        include __DIR__ . '/html/nav.php';
 
         echo '<form method="post" action="admin-post.php">';
         echo '<input type="hidden" name="action" value="ry-invoice-smilepay-option">';
         wp_nonce_field('ry-invoice-smilepay-option');
-        include RY_IFSMILEPAY_PLUGIN_DIR . 'admin/page/html/option.php';
+        include __DIR__ . '/html/option.php';
         submit_button();
         echo '</form>';
 
