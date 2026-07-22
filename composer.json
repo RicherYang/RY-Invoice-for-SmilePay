@@ -8,6 +8,8 @@
         "psr-4": {
             "RY\\General\\": "includes/ry-general",
             "RY\\Paid\\": "includes/ry-paid",
+            "RY\\Invoice\\Smilepay\\": "classes",
+            "RY\\Invoice\\Smilepay\\Admin\\": "admin",
             "RY\\Invoice\\Smilepay\\WooCommerce\\": "woocommerce"
         }
     },

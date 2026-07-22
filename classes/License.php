@@ -1,16 +1,19 @@
 <?php
 
+namespace RY\Invoice\Smilepay;
+
 defined('ABSPATH') or exit;
 
+use RY\Invoice\Smilepay\LinkServer;
 use RY\Paid\AbstractLicense;
 
-final class RY_IFSMILEPAY_License extends AbstractLicense
+final class License extends AbstractLicense
 {
-    public static string $main_class = RY_IFSMILEPAY::class;
+    public static string $main_class = \RY_IFSMILEPAY::class;
 
     private static ?self $_instance = null;
 
-    public static function instance(): RY_IFSMILEPAY_License
+    public static function instance(): License
     {
         if (null === self::$_instance) {
             self::$_instance = new self();
@@ -27,16 +30,16 @@ final class RY_IFSMILEPAY_License extends AbstractLicense
 
     public function activate_key()
     {
-        return RY_IFSMILEPAY_LinkServer::instance()->activate_key($this->get_license_key());
+        return LinkServer::instance()->activate_key($this->get_license_key());
     }
 
     public function get_version_info()
     {
-        $version_info = RY_IFSMILEPAY::get_transient('version_info');
+        $version_info = \RY_IFSMILEPAY::get_transient('version_info');
         if (empty($version_info)) {
-            $version_info = RY_IFSMILEPAY_LinkServer::instance()->check_version();
+            $version_info = LinkServer::instance()->check_version();
             if ($version_info) {
-                RY_IFSMILEPAY::set_transient('version_info', $version_info, HOUR_IN_SECONDS);
+                \RY_IFSMILEPAY::set_transient('version_info', $version_info, HOUR_IN_SECONDS);
             }
         }
 
@@ -45,12 +48,12 @@ final class RY_IFSMILEPAY_License extends AbstractLicense
 
     public function check_expire(): void
     {
-        $json = RY_IFSMILEPAY_LinkServer::instance()->expire_data();
+        $json = LinkServer::instance()->expire_data();
         if (is_array($json) && isset($json['data'])) {
             $this->set_license_data($json['data']);
-            RY_IFSMILEPAY::delete_transient('expire_link_error');
+            \RY_IFSMILEPAY::delete_transient('expire_link_error');
         } elseif ($json === false) {
-            $link_error = (int) RY_IFSMILEPAY::get_transient('expire_link_error');
+            $link_error = (int) \RY_IFSMILEPAY::get_transient('expire_link_error');
             if ($link_error > 3) {
                 $this->delete_license();
             } else {
@@ -58,7 +61,7 @@ final class RY_IFSMILEPAY_License extends AbstractLicense
                     $link_error = 0;
                 }
                 $link_error += 1;
-                RY_IFSMILEPAY::set_transient('expire_link_error', $link_error);
+                \RY_IFSMILEPAY::set_transient('expire_link_error', $link_error);
             }
         } else {
             $this->delete_license();

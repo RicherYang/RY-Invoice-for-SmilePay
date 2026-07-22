@@ -4,6 +4,11 @@ defined('ABSPATH') or exit;
 
 use RY\General\AbstractBasic;
 use RY\General\Logs;
+use RY\Invoice\Smilepay\Admin\Admin;
+use RY\Invoice\Smilepay\Cron;
+use RY\Invoice\Smilepay\License;
+use RY\Invoice\Smilepay\Update;
+use RY\Invoice\Smilepay\Updater;
 use RY\Invoice\Smilepay\WooCommerce\Fields;
 use RY\Invoice\Smilepay\WooCommerce\Invoice;
 
@@ -33,8 +38,7 @@ final class RY_IFSMILEPAY extends AbstractBasic
         Logs::set_log(RY_IFSMILEPAY::get_option('log', 'no') === 'yes', 'smilepay-invoice');
 
         if (is_admin()) {
-            include_once RY_IFSMILEPAY_PLUGIN_DIR . 'includes/update.php';
-            RY_IFSMILEPAY_Update::update();
+            Update::update();
         }
 
         add_action('init', [$this, 'do_wp_init'], 9);
@@ -42,29 +46,20 @@ final class RY_IFSMILEPAY extends AbstractBasic
 
     public function do_wp_init(): void
     {
-        include_once RY_IFSMILEPAY_PLUGIN_DIR . 'includes/functions.php';
-        include_once RY_IFSMILEPAY_PLUGIN_DIR . 'includes/license.php';
-        include_once RY_IFSMILEPAY_PLUGIN_DIR . 'includes/link-server.php';
-        include_once RY_IFSMILEPAY_PLUGIN_DIR . 'includes/updater.php';
-        RY_IFSMILEPAY_Updater::instance();
+        Updater::instance();
 
         if (is_admin()) {
-            include_once RY_IFSMILEPAY_PLUGIN_DIR . 'admin/admin.php';
-            RY_IFSMILEPAY_Admin::instance();
+            Admin::instance();
         }
 
-        if (RY_IFSMILEPAY_License::instance()->is_activated()) {
-            include_once RY_IFSMILEPAY_PLUGIN_DIR . 'includes/abstracts/abstract-smilepay.php';
-            include_once RY_IFSMILEPAY_PLUGIN_DIR . 'includes/invoice.php';
-
-            include_once RY_IFSMILEPAY_PLUGIN_DIR . 'includes/cron.php';
-            RY_IFSMILEPAY_Cron::add_action();
+        if (License::instance()->is_activated()) {
+            Cron::add_action();
         }
 
         if (has_action('woocommerce_init')) {
             Fields::instance();
 
-            if (RY_IFSMILEPAY_License::instance()->is_activated()) {
+            if (License::instance()->is_activated()) {
                 Invoice::instance();
             }
         }

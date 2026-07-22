@@ -1,10 +1,12 @@
 <?php
 
+namespace RY\Invoice\Smilepay;
+
 defined('ABSPATH') or exit;
 
 use RY\General\Logs;
 
-final class RY_IFSMILEPAY_Invoice extends RY_IFSMILEPAY_Abstract_Invoice
+final class LinkProvider
 {
     private static ?self $_instance = null;
 
@@ -18,7 +20,7 @@ final class RY_IFSMILEPAY_Invoice extends RY_IFSMILEPAY_Abstract_Invoice
         'invalid' => 'https://ssl.smse.com.tw/api/SPEinvoice_Storage_Modify.asp',
     ];
 
-    public static function instance(): RY_IFSMILEPAY_Invoice
+    public static function instance(): LinkProvider
     {
         if (null === self::$_instance) {
             self::$_instance = new self();
@@ -35,7 +37,7 @@ final class RY_IFSMILEPAY_Invoice extends RY_IFSMILEPAY_Abstract_Invoice
         $general_info = $this->get_info();
         $api_info = $this->get_api_info();
 
-        $now = new DateTime('now', new DateTimeZone('Asia/Taipei'));
+        $now = new \DateTime('now', new \DateTimeZone('Asia/Taipei'));
         $post_args = [
             'InvoiceDate' => $now->format('Y/m/d'),
             'InvoiceTime' => $now->format('H:i:s'),
@@ -190,7 +192,7 @@ final class RY_IFSMILEPAY_Invoice extends RY_IFSMILEPAY_Abstract_Invoice
 
     public function get_info()
     {
-        $general_info = RY_IFSMILEPAY::get_option('general', []);
+        $general_info = \RY_IFSMILEPAY::get_option('general', []);
         if (!is_array($general_info)) {
             $general_info = [];
         }
@@ -207,7 +209,7 @@ final class RY_IFSMILEPAY_Invoice extends RY_IFSMILEPAY_Abstract_Invoice
 
     public function get_api_info()
     {
-        $api_info = RY_IFSMILEPAY::get_option('apiinfo', []);
+        $api_info = \RY_IFSMILEPAY::get_option('apiinfo', []);
         if (!is_array($api_info)) {
             $api_info = [];
         }
@@ -224,5 +226,45 @@ final class RY_IFSMILEPAY_Invoice extends RY_IFSMILEPAY_Abstract_Invoice
         }
 
         return $api_info;
+    }
+
+    protected function generate_trade_no($object_ID, $order_prefix = '')
+    {
+        $trade_no = $order_prefix . $object_ID . 'T' . random_int(0, 9) . strrev((string) time());
+        $trade_no = apply_filters('ry_invoice_smilepay-trade_no', $trade_no, $object_ID, $order_prefix);
+
+        return substr($trade_no, 0, 18);
+    }
+
+    protected function link_server(string $url, array $args, string $Grvc, string $VerifyKey, int $timeout = 30)
+    {
+        wc_set_time_limit(40);
+
+        $args['Grvc'] = $Grvc;
+        $args['Verify_key'] = $VerifyKey;
+        $response = wp_remote_post($url, [
+            'timeout' => $timeout,
+            'body' => $args,
+            'user-agent' => apply_filters('http_headers_useragent', 'WordPress/' . get_bloginfo('version')),
+        ]);
+
+        if (is_wp_error($response)) {
+            Logs::log('smilepay-invoice', 'error', 'Link failed', $response->get_error_messages());
+            return;
+        }
+
+        if (wp_remote_retrieve_response_code($response) != 200) {
+            Logs::log('smilepay-invoice', 'error', 'Link HTTP status error', ['status' => wp_remote_retrieve_response_code($response)]);
+            return;
+        }
+
+        $result = @simplexml_load_string(wp_remote_retrieve_body($response));
+
+        if (!is_object($result)) {
+            Logs::log('smilepay-invoice', 'error', 'Link response parse failed', ['response' => wp_remote_retrieve_body($response)]);
+            return;
+        }
+
+        return $result;
     }
 }

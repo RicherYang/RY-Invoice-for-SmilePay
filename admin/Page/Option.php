@@ -1,10 +1,13 @@
 <?php
 
+namespace RY\Invoice\Smilepay\Admin\Page;
+
 defined('ABSPATH') or exit;
 
 use RY\General\AbstractAdminPage;
+use RY\Invoice\Smilepay\Admin\Admin;
 
-final class RY_IFSMILEPAY_Admin_Page_Option extends AbstractAdminPage
+final class Option extends AbstractAdminPage
 {
     public static function init_menu(): void
     {
@@ -30,7 +33,7 @@ final class RY_IFSMILEPAY_Admin_Page_Option extends AbstractAdminPage
 
         if ($_wp_menu_nopriv) {
             $_wp_menu_nopriv['ry-invoice-smilepay-option'] = true;
-            $_wp_real_parent_file['ry-invoice-smilepay-option'] = RY_IFSMILEPAY_Admin::instance()->main_slug;
+            $_wp_real_parent_file['ry-invoice-smilepay-option'] = Admin::instance()->main_slug;
             $submenu_file = 'ry-invoice';
         }
     }
@@ -63,17 +66,15 @@ final class RY_IFSMILEPAY_Admin_Page_Option extends AbstractAdminPage
         }
 
         $log = sanitize_locale_name($_POST['log'] ?? '') === 'yes' ? 'yes' : 'no';
-        RY_IFSMILEPAY::update_option('log', $log);
+        \RY_IFSMILEPAY::update_option('log', $log);
         $api_info = [
             'testmode' => sanitize_locale_name($_POST['testmode'] ?? '') === 'yes' ? 'yes' : 'no',
             'Grvc' => sanitize_locale_name($_POST['Grvc'] ?? ''),
             'VerifyKey' => sanitize_locale_name($_POST['VerifyKey'] ?? ''),
         ];
-        RY_IFSMILEPAY::update_option('apiinfo', $api_info, false);
+        \RY_IFSMILEPAY::update_option('apiinfo', $api_info, false);
         $this->add_notice('success', __('Settings saved.', 'ry-invoice-for-smilepay'));
 
         wp_safe_redirect(admin_url('admin.php?page=ry-invoice-smilepay-option'));
     }
 }
-
-RY_IFSMILEPAY_Admin_Page_Option::init_menu();

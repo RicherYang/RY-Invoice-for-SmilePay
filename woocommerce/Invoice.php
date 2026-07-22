@@ -5,6 +5,7 @@ namespace RY\Invoice\Smilepay\WooCommerce;
 defined('ABSPATH') or exit;
 
 use RY\General\Logs;
+use RY\Invoice\Smilepay\LinkProvider;
 use RY\Invoice\Smilepay\WooCommerce\Admin\Admin;
 
 final class Invoice
@@ -360,7 +361,7 @@ final class Invoice
         }
 
         Logs::log('smilepay-invoice', 'info', 'Get WooCommerce #' . $order->get_id(), $invoice_data);
-        \RY_IFSMILEPAY_Invoice::instance()->get_invoice($invoice_data, $order->get_id());
+        LinkProvider::instance()->get_invoice($invoice_data, $order->get_id());
     }
 
     public function cancel_invoice($order)
@@ -387,6 +388,6 @@ final class Invoice
             'date' => $order->get_meta('_invoice_date'),
         ];
         Logs::log('smilepay-invoice', 'info', 'Invalid WooCommerce #' . $order->get_id(), $invoice_data);
-        \RY_IFSMILEPAY_Invoice::instance()->invalid_invoice($invoice_data, $order->get_id());
+        LinkProvider::instance()->invalid_invoice($invoice_data, $order->get_id());
     }
 }

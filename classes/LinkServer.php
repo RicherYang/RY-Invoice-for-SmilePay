@@ -1,16 +1,18 @@
 <?php
 
+namespace RY\Invoice\Smilepay;
+
 defined('ABSPATH') or exit;
 
 use RY\Paid\AbstractLinkServer;
 
-final class RY_IFSMILEPAY_LinkServer extends AbstractLinkServer
+final class LinkServer extends AbstractLinkServer
 {
     private static ?self $_instance = null;
 
     protected string $plugin_slug = 'ry-invoice-for-smilepay';
 
-    public static function instance(): RY_IFSMILEPAY_LinkServer
+    public static function instance(): LinkServer
     {
         if (null === self::$_instance) {
             self::$_instance = new self();
