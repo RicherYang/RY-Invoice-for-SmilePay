@@ -5,15 +5,13 @@ namespace RY\Invoice\Smilepay\Admin\Page;
 defined('ABSPATH') or exit;
 
 use RY\General\V20260724\AbstractAdminPage;
-use RY\Invoice\Smilepay\Admin\Admin;
 
 final class Option extends AbstractAdminPage
 {
     public static function init_menu(): void
     {
-        add_filter('ry-invoice-navs', [__CLASS__, 'add_nav']);
-        add_submenu_page('', __('SmilePay options', 'ry-invoice-for-smilepay'), '', 'manage_options', 'ry-invoice-smilepay-option', [__CLASS__, 'pre_show_page']);
-        add_action('load-admin_page_ry-invoice-smilepay-option', [__CLASS__, 'instance']);
+        add_filter('ry_invoice-navs', [__CLASS__, 'add_nav']);
+        add_action('ry_invoice-show_page-smilepay-option', [__CLASS__, 'pre_show_page']);
         add_action('admin_post_ry-invoice-smilepay-option', [__CLASS__, 'admin_action']);
     }
 
@@ -21,38 +19,22 @@ final class Option extends AbstractAdminPage
     {
         $navs[] = [
             'name' => __('SmilePay options', 'ry-invoice-for-smilepay'),
-            'slug' => 'ry-invoice-smilepay-option',
+            'type' => 'smilepay-option',
         ];
 
         return $navs;
     }
 
-    protected function do_init(): void
-    {
-        global $_wp_menu_nopriv, $_wp_real_parent_file, $submenu_file;
-
-        if ($_wp_menu_nopriv) {
-            $_wp_menu_nopriv['ry-invoice-smilepay-option'] = true;
-            $_wp_real_parent_file['ry-invoice-smilepay-option'] = Admin::instance()->main_slug;
-            $submenu_file = 'ry-invoice';
-        }
-    }
+    protected function do_init(): void {}
 
     public function output_page(): void
     {
-        echo '<div class="wrap">';
-
-        $show_type = 'ry-invoice-smilepay-option';
-        include __DIR__ . '/html/nav.php';
-
         echo '<form method="post" action="admin-post.php">';
         echo '<input type="hidden" name="action" value="ry-invoice-smilepay-option">';
         wp_nonce_field('ry-invoice-smilepay-option');
         include __DIR__ . '/html/option.php';
         submit_button();
         echo '</form>';
-
-        echo '</div>';
     }
 
     public function do_admin_action(string $action): void
@@ -75,6 +57,6 @@ final class Option extends AbstractAdminPage
         \RY_IFSMILEPAY::update_option('apiinfo', $api_info, false);
         $this->add_notice('success', __('Settings saved.', 'ry-invoice-for-smilepay'));
 
-        wp_safe_redirect(admin_url('admin.php?page=ry-invoice-smilepay-option'));
+        wp_safe_redirect(admin_url('admin.php?page=ry-invoice&type=smilepay-option'));
     }
 }
