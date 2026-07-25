@@ -4,7 +4,7 @@ namespace RY\Invoice\Smilepay;
 
 defined('ABSPATH') or exit;
 
-use RY\General\Logs;
+use RY\General\V20260724\Logs;
 
 final class LinkProvider
 {
