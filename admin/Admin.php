@@ -8,7 +8,7 @@ use RY\Invoice\Smilepay\Admin\Ajax;
 use RY\Invoice\Smilepay\Admin\Page\General as PageGeneral;
 use RY\Invoice\Smilepay\Admin\Page\Option as PageOption;
 use RY\Invoice\Smilepay\License;
-use RY\Paid\V20260724\AbstractAdmin;
+use RY\Paid\V20260727\AbstractAdmin;
 
 final class Admin extends AbstractAdmin
 {
@@ -82,6 +82,7 @@ final class Admin extends AbstractAdmin
         $menu_list[] = [
             'name' => __('E-Invoice', 'ry-invoice-for-smilepay'),
             'slug' => 'ry-invoice',
+            'capability' => 'manage_options',
             'function' => [$this, 'show_page'],
         ];
 

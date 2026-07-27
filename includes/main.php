@@ -2,12 +2,12 @@
 
 defined('ABSPATH') or exit;
 
-use RY\General\V20260724\AbstractBasic;
-use RY\General\V20260724\ActionScheduler;
-use RY\General\V20260724\Logs;
+use RY\General\V20260727\AbstractBasic;
+use RY\General\V20260727\Logs;
 use RY\Invoice\Smilepay\Admin\Admin;
 use RY\Invoice\Smilepay\Cron;
 use RY\Invoice\Smilepay\License;
+use RY\Invoice\Smilepay\LinkServer;
 use RY\Invoice\Smilepay\Update;
 use RY\Invoice\Smilepay\Updater;
 use RY\Invoice\Smilepay\WooCommerce\Fields;
@@ -34,8 +34,6 @@ final class RY_IFSMILEPAY extends AbstractBasic
     protected function do_init(): void
     {
         load_plugin_textdomain('ry-invoice-for-smilepay', false, plugin_basename(dirname(__DIR__)) . '/languages');
-        include_once RY_IFSMILEPAY_PLUGIN_DIR . 'includes/vendor/woocommerce/action-scheduler/action-scheduler.php';
-        ActionScheduler::instance();
 
         Logs::set_log(RY_IFSMILEPAY::get_option('log', 'no') === 'yes', 'smilepay-invoice');
 
@@ -58,7 +56,7 @@ final class RY_IFSMILEPAY extends AbstractBasic
             Cron::add_action();
         }
 
-        if (has_action('woocommerce_init')) {
+        if (did_action('woocommerce_init')) {
             Fields::instance();
 
             if (License::instance()->is_activated()) {
@@ -67,9 +65,18 @@ final class RY_IFSMILEPAY extends AbstractBasic
         }
     }
 
-    public static function plugin_activation() {}
+    public static function usage_tracking(): void
+    {
+        if (get_option('RY_General_tracking', 'yes') !== 'yes') {
+            return;
+        }
 
-    public static function plugin_deactivation()
+        LinkServer::instance()->send_tracking();
+    }
+
+    public static function plugin_activation(): void {}
+
+    public static function plugin_deactivation(): void
     {
         wp_unschedule_hook(self::OPTION_PREFIX . 'check_expire');
     }

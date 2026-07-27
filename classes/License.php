@@ -5,7 +5,7 @@ namespace RY\Invoice\Smilepay;
 defined('ABSPATH') or exit;
 
 use RY\Invoice\Smilepay\LinkServer;
-use RY\Paid\V20260724\AbstractLicense;
+use RY\Paid\V20260727\AbstractLicense;
 
 final class License extends AbstractLicense
 {
