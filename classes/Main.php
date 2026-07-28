@@ -1,19 +1,16 @@
 <?php
 
+namespace RY\Invoice\Smilepay;
+
 defined('ABSPATH') or exit;
 
 use RY\General\V20260727\AbstractBasic;
 use RY\General\V20260727\Logs;
 use RY\Invoice\Smilepay\Admin\Admin;
-use RY\Invoice\Smilepay\Cron;
-use RY\Invoice\Smilepay\License;
-use RY\Invoice\Smilepay\LinkServer;
-use RY\Invoice\Smilepay\Update;
-use RY\Invoice\Smilepay\Updater;
 use RY\Invoice\Smilepay\WooCommerce\Fields;
 use RY\Invoice\Smilepay\WooCommerce\Invoice;
 
-final class RY_IFSMILEPAY extends AbstractBasic
+final class Main extends AbstractBasic
 {
     public const OPTION_PREFIX = 'RY_IFSMILEPAY_';
 
@@ -21,7 +18,7 @@ final class RY_IFSMILEPAY extends AbstractBasic
 
     private static ?self $_instance = null;
 
-    public static function instance(): RY_IFSMILEPAY
+    public static function instance(): Main
     {
         if (null === self::$_instance) {
             self::$_instance = new self();
@@ -35,7 +32,7 @@ final class RY_IFSMILEPAY extends AbstractBasic
     {
         load_plugin_textdomain('ry-invoice-for-smilepay', false, plugin_basename(dirname(__DIR__)) . '/languages');
 
-        Logs::set_log(RY_IFSMILEPAY::get_option('log', 'no') === 'yes', 'smilepay-invoice');
+        Logs::set_log(self::get_option('log', 'no') === 'yes', 'smilepay-invoice');
 
         if (is_admin()) {
             Update::update();

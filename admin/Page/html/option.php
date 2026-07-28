@@ -3,6 +3,7 @@
 <?php
 use RY\General\V20260727\Utils;
 use RY\Invoice\Smilepay\LinkProvider;
+use RY\Invoice\Smilepay\Main;
 
 ?>
 
@@ -16,7 +17,7 @@ use RY\Invoice\Smilepay\LinkProvider;
         <td>
             <fieldset>
                 <legend class="screen-reader-text"><span><?php esc_html_e('Debug log', 'ry-invoice-for-smilepay'); ?></span></legend>
-                <label for="log"><input name="log" type="checkbox" id="log" value="yes" <?php checked(Utils::string_to_bool(RY_IFSMILEPAY::get_option('log', 'no'))); ?>>
+                <label for="log"><input name="log" type="checkbox" id="log" value="yes" <?php checked(Utils::string_to_bool(Main::get_option('log', 'no'))); ?>>
                     <?php esc_html_e('Enable log', 'ry-invoice-for-smilepay'); ?></label>
                 <p class="description">
                     <?php echo wp_kses(

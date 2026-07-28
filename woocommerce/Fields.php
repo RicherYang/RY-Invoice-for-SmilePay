@@ -4,6 +4,7 @@ namespace RY\Invoice\Smilepay\WooCommerce;
 
 defined('ABSPATH') or exit;
 
+use RY\Invoice\Smilepay\Main;
 use RY\Invoice\Smilepay\Utils;
 
 final class Fields
@@ -75,7 +76,7 @@ final class Fields
             ],
         ];
 
-        if (\RY_IFSMILEPAY::get_option('move_billing_company', 'no') === 'yes') {
+        if (Main::get_option('move_billing_company', 'no') === 'yes') {
             unset($fields['billing']['billing_company']);
             $fields['invoice']['invoice_company_name'] = [
                 'label' => __('Company name', 'ry-invoice-for-smilepay'),
@@ -206,7 +207,7 @@ final class Fields
                 $order->delete_meta_data('_' . $key);
             }
         }
-        if (\RY_IFSMILEPAY::get_option('move_billing_company', 'no') === 'yes') {
+        if (Main::get_option('move_billing_company', 'no') === 'yes') {
             $order->set_billing_company($data['invoice_company_name'] ?? '');
         }
     }

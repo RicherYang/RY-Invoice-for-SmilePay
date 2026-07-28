@@ -5,6 +5,7 @@ namespace RY\Invoice\Smilepay\Admin\Page;
 defined('ABSPATH') or exit;
 
 use RY\General\V20260727\AbstractAdminPage;
+use RY\Invoice\Smilepay\Main;
 
 final class General extends AbstractAdminPage
 {
@@ -55,7 +56,7 @@ final class General extends AbstractAdminPage
             'amount_precision' => intval($_POST['amount_precision'] ?? ''),
         ];
 
-        \RY_IFSMILEPAY::update_option('general', $general_info, false);
+        Main::update_option('general', $general_info, false);
         $this->add_notice('success', __('Settings saved.', 'ry-invoice-for-smilepay'));
 
         wp_safe_redirect(admin_url('admin.php?page=ry-invoice&type=general'));

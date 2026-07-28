@@ -4,7 +4,6 @@ namespace RY\Invoice\Smilepay\Admin;
 
 defined('ABSPATH') or exit;
 
-use RY\Invoice\Smilepay\Admin\Ajax;
 use RY\Invoice\Smilepay\Admin\Page\General as PageGeneral;
 use RY\Invoice\Smilepay\Admin\Page\Option as PageOption;
 use RY\Invoice\Smilepay\License;
@@ -32,6 +31,7 @@ final class Admin extends AbstractAdmin
 
         $this->license = License::instance();
         add_filter('ry-plugin/license_list', [$this, 'add_license']);
+
         add_filter('enable_ry_invoice', [$this, 'add_enable_ry_invoice']);
         add_action('admin_notices', [$this, 'show_invoice_check']);
 

@@ -4,8 +4,6 @@ namespace RY\Invoice\Smilepay;
 
 defined('ABSPATH') or exit;
 
-use RY\Invoice\Smilepay\LinkServer;
-
 final class Updater
 {
     private static ?self $_instance = null;
@@ -29,7 +27,7 @@ final class Updater
 
     public function update_plugin($update, $plugin_data)
     {
-        if (\RY_IFSMILEPAY::PLUGIN_NAME !== $plugin_data['Name']) {
+        if (Main::PLUGIN_NAME !== $plugin_data['Name']) {
             return $update;
         }
 
