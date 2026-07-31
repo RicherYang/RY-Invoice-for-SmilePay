@@ -4,8 +4,8 @@ namespace RY\Invoice\Smilepay\Admin\Page;
 
 defined('ABSPATH') or exit;
 
-use RY\General\V20260727\AbstractAdminPage;
-use RY\General\V20260727\Utils;
+use RY\General\V20260729\AbstractAdminPage;
+use RY\General\V20260729\Utils;
 use RY\Invoice\Smilepay\Main;
 
 final class Option extends AbstractAdminPage
@@ -31,23 +31,29 @@ final class Option extends AbstractAdminPage
 
     public function output_page(): void
     {
-        echo '<form method="post" action="admin-post.php">';
-        echo '<input type="hidden" name="action" value="ry-invoice-smilepay-option">';
-        wp_nonce_field('ry-invoice-smilepay-option');
+        echo '<form method="post" action="' . esc_url(admin_url('admin-post.php')) . '">';
         include __DIR__ . '/html/option.php';
-        submit_button();
+        Utils::the_action_form_button('invoice-smilepay-option', 'save-option', __('Save Changes', 'ry-invoice-for-smilepay'), 'submit', 'button-primary');
         echo '</form>';
     }
 
-    public function do_admin_action(string $action): void
+    protected function do_admin_action(string $action, string $real_action): void
     {
         if ('ry-invoice-smilepay-option' !== $action) {
             return;
         }
 
-        if (!wp_verify_nonce($_POST['_wpnonce'] ?? '', 'ry-invoice-smilepay-option')) {
-            wp_die('Invalid nonce');
+        if ($real_action !== '' && is_callable([$this, $real_action])) {
+            $this->$real_action();
         }
+
+        wp_safe_redirect(admin_url('admin.php?page=ry-invoice&type=smilepay-option'));
+        exit;
+    }
+
+    private function save_option(): void
+    {
+        check_ajax_referer('save-option', '_ajax_nonce');
 
         Main::update_option('log', Utils::bool_to_string($_POST['log'] ?? ''));
         $api_info = [
@@ -57,7 +63,5 @@ final class Option extends AbstractAdminPage
         ];
         Main::update_option('apiinfo', $api_info, false);
         $this->add_notice('success', __('Settings saved.', 'ry-invoice-for-smilepay'));
-
-        wp_safe_redirect(admin_url('admin.php?page=ry-invoice&type=smilepay-option'));
     }
 }
