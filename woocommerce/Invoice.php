@@ -4,7 +4,7 @@ namespace RY\Invoice\Smilepay\WooCommerce;
 
 defined('ABSPATH') or exit;
 
-use RY\General\V20260729\Logs;
+use RY\General\V20260801\Logs;
 use RY\Invoice\Smilepay\LinkProvider;
 use RY\Invoice\Smilepay\Main;
 use RY\Invoice\Smilepay\WooCommerce\Admin\Admin;

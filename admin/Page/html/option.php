@@ -1,7 +1,7 @@
 <?php defined('ABSPATH') or exit; ?>
 
 <?php
-use RY\General\V20260729\Utils;
+use RY\General\V20260801\Utils;
 use RY\Invoice\Smilepay\LinkProvider;
 use RY\Invoice\Smilepay\Main;
 
@@ -21,7 +21,7 @@ use RY\Invoice\Smilepay\Main;
                     <?php esc_html_e('Enable log', 'ry-invoice-for-smilepay'); ?></label>
                 <p class="description">
                     <?php echo wp_kses(
-                        __('<strong>Note:</strong> The log may contain personal information.', 'ry-invoice-for-smilepay'),
+                        __('Unable to disable error level log. <strong>Note:</strong> The log may contain personal information.', 'ry-invoice-for-smilepay'),
                         ['strong' => []]
                     ); ?>
                 </p>
@@ -35,7 +35,12 @@ use RY\Invoice\Smilepay\Main;
                 <legend class="screen-reader-text"><span><?php esc_html_e('Sandbox', 'ry-invoice-for-smilepay'); ?></span></legend>
                 <label for="testmode"><input name="testmode" type="checkbox" id="testmode" value="yes" <?php checked($api_info['testmode']); ?>>
                     <?php esc_html_e('Enable sandbox', 'ry-invoice-for-smilepay'); ?></label>
-                <p class="description"><?php esc_html_e('Note: For developers use ONLY.', 'ry-invoice-for-smilepay'); ?></p>
+                <p class="description">
+                    <?php echo wp_kses(
+                        __('<strong>Note:</strong> For developers use ONLY.', 'ry-invoice-for-smilepay'),
+                        ['strong' => []]
+                    ); ?>
+                </p>
             </fieldset>
         </td>
     </tr>

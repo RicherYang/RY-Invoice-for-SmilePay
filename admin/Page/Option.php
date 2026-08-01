@@ -4,8 +4,8 @@ namespace RY\Invoice\Smilepay\Admin\Page;
 
 defined('ABSPATH') or exit;
 
-use RY\General\V20260729\AbstractAdminPage;
-use RY\General\V20260729\Utils;
+use RY\General\V20260801\AbstractAdminPage;
+use RY\General\V20260801\Utils;
 use RY\Invoice\Smilepay\Main;
 
 final class Option extends AbstractAdminPage
