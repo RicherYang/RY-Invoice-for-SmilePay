@@ -5,7 +5,7 @@ namespace RY\Invoice\Smilepay\WooCommerce;
 defined('ABSPATH') or exit;
 
 use RY\Invoice\Smilepay\Main;
-use RY\Invoice\V20260729\WooCommerce\AbstractFields;
+use RY\Invoice\V20260805\WooCommerce\AbstractFields;
 
 final class Fields extends AbstractFields
 {

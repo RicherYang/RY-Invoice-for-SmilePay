@@ -60,7 +60,7 @@ $(function () {
             return;
         }
         $.blockUI({
-            message: RyWaiAdminInvoiceParams.i18n[action],
+            message: RyAdminInvoiceParams.i18n[action],
         });
         $.ajax({
             url: ajaxurl,
@@ -68,7 +68,7 @@ $(function () {
             data: {
                 action: `RY_IFSMILEPAY_${action}`,
                 id: $(this).data('orderid'),
-                _ajax_nonce: RyWaiAdminInvoiceParams._nonce[action]
+                _ajax_nonce: RyAdminInvoiceParams._nonce[action]
             }
         }).always(function () {
             location.reload();

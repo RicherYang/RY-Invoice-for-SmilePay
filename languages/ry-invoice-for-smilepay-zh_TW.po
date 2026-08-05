@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2026-06-29T20:45:49+08:00\n"
-"PO-Revision-Date: 2026-08-01 17:01+0800\n"
+"PO-Revision-Date: 2026-08-05 15:57+0800\n"
 "Language: zh_TW\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-KeywordsList: __;_e;esc_html_e;esc_html_x:1,2c;esc_html__;esc_attr_e;esc_attr_x:1,2c;esc_attr__;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;_x:1,2c;_n:1,2;_n_noop:1,2;__ngettext:1,2;__ngettext_noop:1,2;_c,_nc:4c,1,2\n"
@@ -568,3 +568,60 @@ msgstr "無法停用錯誤等級的紀錄。<strong>注意：</strong>紀錄可�
 #: admin/Page/html/option.php:40
 msgid "<strong>Note:</strong> For developers use ONLY."
 msgstr "<strong>注意：</strong>僅供開發者使用。"
+
+#: includes/ry-invoice/ListTable/Track.php:14
+msgctxt "Track table header"
+msgid "Year"
+msgstr "年分"
+
+#: includes/ry-invoice/ListTable/Track.php:15
+msgctxt "Track table header"
+msgid "Term"
+msgstr "期別"
+
+#: includes/ry-invoice/ListTable/Track.php:16
+msgctxt "Track table header"
+msgid "Code"
+msgstr "字軌名稱"
+
+#: includes/ry-invoice/ListTable/Track.php:17
+msgctxt "Track table header"
+msgid "Start number"
+msgstr "起始號碼"
+
+#: includes/ry-invoice/ListTable/Track.php:18
+msgctxt "Track table header"
+msgid "End number"
+msgstr "結束號碼"
+
+#: includes/ry-invoice/ListTable/Track.php:19
+msgctxt "Track table header"
+msgid "Current number"
+msgstr "目前已使用號碼"
+
+#: includes/ry-invoice/ListTable/Track.php:20
+msgctxt "Track table header"
+msgid "Unused quantity"
+msgstr "未使用數量"
+
+#: includes/ry-invoice/ListTable/Track.php:21
+msgctxt "Track table header"
+msgid "Track code"
+msgstr "字軌代號"
+
+#: includes/ry-invoice/ListTable/Track.php:22
+msgctxt "Track table header"
+msgid "Status"
+msgstr "狀態"
+
+#: includes/ry-invoice/Page/Status.php:22
+msgid "Track status"
+msgstr "字軌狀態"
+
+#: includes/ry-invoice/Page/Status.php:42
+msgid "Loading data..."
+msgstr "資料讀取中..."
+
+#: includes/ry-invoice/Page/Status.php:43
+msgid "Only get this and next term status."
+msgstr "只讀取本期與下期的狀態。"
