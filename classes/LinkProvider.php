@@ -220,7 +220,7 @@ final class LinkProvider extends AbstractLinkProvider
 
     protected function link_server(string $url, array $args, string $Grvc, string $VerifyKey, int $timeout = 30)
     {
-        wc_set_time_limit(40);
+        @set_time_limit(40);
 
         $args['Grvc'] = $Grvc;
         $args['Verify_key'] = $VerifyKey;
