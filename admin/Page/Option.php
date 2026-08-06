@@ -62,6 +62,10 @@ final class Option extends AbstractAdminPage
             'VerifyKey' => sanitize_locale_name($_POST['VerifyKey'] ?? ''),
         ];
         Main::update_option('apiinfo', $api_info, false);
+
+        if (empty($api_info['Grvc']) || empty($api_info['VerifyKey'])) {
+            $this->add_notice('info', __('Need API key information for connect to provider server.', 'ry-invoice-for-smilepay'));
+        }
         $this->add_notice('success', __('Settings saved.', 'ry-invoice-for-smilepay'));
     }
 }

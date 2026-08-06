@@ -189,7 +189,7 @@ final class LinkProvider extends AbstractLinkProvider
         }
     }
 
-    public function get_api_info($load_test = true)
+    public function get_api_info()
     {
         $api_info = Main::get_option('apiinfo', []);
         if (!is_array($api_info)) {
@@ -201,11 +201,6 @@ final class LinkProvider extends AbstractLinkProvider
             'VerifyKey' => '',
         ], $api_info);
         $api_info['testmode'] = Utils::string_to_bool($api_info['testmode']);
-
-        if ($load_test && $api_info['testmode']) {
-            $api_info['Grvc'] = 'SEI1000034';
-            $api_info['VerifyKey'] = '9D73935693EE0237FABA6AB744E48661';
-        }
 
         return $api_info;
     }
