@@ -4,8 +4,8 @@ namespace RY\Invoice\Smilepay;
 
 defined('ABSPATH') or exit;
 
-use RY\General\V20260801\AbstractBasic;
-use RY\General\V20260801\Utils;
+use RY\General\V20260810\AbstractBasic;
+use RY\General\V20260810\Utils;
 use RY\Invoice\Smilepay\Admin\Admin;
 use RY\Invoice\Smilepay\WooCommerce\Fields;
 use RY\Invoice\Smilepay\WooCommerce\Invoice;
