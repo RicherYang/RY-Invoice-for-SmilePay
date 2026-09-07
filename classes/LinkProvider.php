@@ -6,7 +6,7 @@ defined('ABSPATH') or exit;
 
 use RY\General\V20260810\Logs;
 use RY\General\V20260810\Utils;
-use RY\Invoice\V20260827\AbstractLinkProvider;
+use RY\Invoice\V20260906\AbstractLinkProvider;
 
 final class LinkProvider extends AbstractLinkProvider
 {
@@ -64,8 +64,8 @@ final class LinkProvider extends AbstractLinkProvider
             'UnitTAX' => 'Y',
             'TaxAmount' => 0,
 
-            'Name' => __('Customer', 'ry-invoice-for-smilepay'),
-            'Address' => __('Taiwan', 'ry-invoice-for-smilepay'),
+            'Name' => $general_info['buyer']['name'] ? $invoice_data['name'] : __('Customer', 'ry-invoice-for-smilepay'),
+            'Address' => $general_info['buyer']['address'] ? $invoice_data['address'] : __('Taiwan', 'ry-invoice-for-smilepay'),
             'Email' => $invoice_data['email'],
             'CarrierType' => '',
             'CarrierID' => '',
