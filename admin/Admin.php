@@ -7,7 +7,7 @@ defined('ABSPATH') or exit;
 use RY\Invoice\Smilepay\Admin\Page\Option as PageOption;
 use RY\Invoice\Smilepay\License;
 use RY\Invoice\Smilepay\Main;
-use RY\Invoice\V20260906\Page\General as PageGeneral;
+use RY\Invoice\V20261004\Page\General as PageGeneral;
 use RY\Paid\V20260729\AbstractAdmin;
 
 final class Admin extends AbstractAdmin
