@@ -98,12 +98,14 @@ final class Admin extends AbstractAdmin
 
     public function add_menu(array $menu_list): array
     {
-        $menu_list[] = [
-            'name' => __('E-Invoice', 'ry-invoice-for-smilepay'),
-            'slug' => 'ry-invoice',
-            'capability' => 'manage_options',
-            'function' => [$this, 'show_page'],
-        ];
+        if (!in_array('ry-invoice', array_column($menu_list, 'slug'))) {
+            $menu_list[] = [
+                'name' => __('E-Invoice', 'ry-invoice-for-smilepay'),
+                'slug' => 'ry-invoice',
+                'capability' => 'manage_options',
+                'function' => [$this, 'show_page'],
+            ];
+        }
 
         return $menu_list;
     }

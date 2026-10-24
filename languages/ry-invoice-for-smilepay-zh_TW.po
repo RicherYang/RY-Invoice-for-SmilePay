@@ -33,7 +33,7 @@ msgstr "https://ry-plugin.com/ry-invoice-for-smilepay"
 msgid "Richer Yang"
 msgstr "Richer Yang"
 
-#: admin/Admin.php:102
+#: admin/Admin.php:103
 msgid "E-Invoice"
 msgstr "電子發票"
 
