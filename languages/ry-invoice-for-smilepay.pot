@@ -2,7 +2,7 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: RY Invoice for SmilePay 2026.10.4\n"
+"Project-Id-Version: RY Invoice for SmilePay 2026.11.7\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ry-invoice-for-smilepay\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -131,6 +131,10 @@ msgstr ""
 
 #: classes/LinkProvider.php:174
 msgid "Order cancel"
+msgstr ""
+
+#: includes/ry-general/AbstractAdmin.php:32
+msgid "Please check your server time setting. Server time is differs from NTP more than one minute."
 msgstr ""
 
 #: includes/ry-general/ActionScheduler/ListTable.php:30
