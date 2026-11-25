@@ -41,7 +41,9 @@ final class Ajax
                 if (function_exists('wc_get_order')) {
                     $order = wc_get_order($object_ID);
                     if ($order) {
-                        Invoice::instance()->get_invoice($order);
+                        if (current_user_can(get_post_type_object('shop_order')->cap->edit_post, $order->get_id()) || current_user_can('manage_woocommerce')) {
+                            Invoice::instance()->get_invoice($order);
+                        }
                     }
                 }
                 break;
@@ -63,7 +65,9 @@ final class Ajax
                 if (function_exists('wc_get_order')) {
                     $order = wc_get_order($object_ID);
                     if ($order) {
-                        Invoice::instance()->cancel_invoice($order);
+                        if (current_user_can(get_post_type_object('shop_order')->cap->edit_post, $order->get_id()) || current_user_can('manage_woocommerce')) {
+                            Invoice::instance()->cancel_invoice($order);
+                        }
                     }
                 }
                 break;
@@ -85,7 +89,9 @@ final class Ajax
                 if (function_exists('wc_get_order')) {
                     $order = wc_get_order($object_ID);
                     if ($order) {
-                        Invoice::instance()->invalid_invoice($order);
+                        if (current_user_can(get_post_type_object('shop_order')->cap->edit_post, $order->get_id()) || current_user_can('manage_woocommerce')) {
+                            Invoice::instance()->invalid_invoice($order);
+                        }
                     }
                 }
                 break;
