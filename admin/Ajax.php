@@ -9,26 +9,14 @@ use RY\Invoice\Smilepay\WooCommerce\Invoice;
 
 final class Ajax
 {
-    private static ?self $_instance = null;
-
-    public static function instance(): Ajax
+    public static function init_action(): void
     {
-        if (null === self::$_instance) {
-            self::$_instance = new self();
-            self::$_instance->do_init();
-        }
-
-        return self::$_instance;
+        add_action('wp_ajax_RY_IFSMILEPAY_get', [__CLASS__, 'get_invoice']);
+        add_action('wp_ajax_RY_IFSMILEPAY_cancel', [__CLASS__, 'cancel_invoice']);
+        add_action('wp_ajax_RY_IFSMILEPAY_invalid', [__CLASS__, 'invalid_invoice']);
     }
 
-    protected function do_init(): void
-    {
-        add_action('wp_ajax_RY_IFSMILEPAY_get', [$this, 'get_invoice']);
-        add_action('wp_ajax_RY_IFSMILEPAY_cancel', [$this, 'cancel_invoice']);
-        add_action('wp_ajax_RY_IFSMILEPAY_invalid', [$this, 'invalid_invoice']);
-    }
-
-    public function get_invoice()
+    public static function get_invoice(): void
     {
         check_ajax_referer('get-invoice');
 
@@ -52,7 +40,7 @@ final class Ajax
         wp_die();
     }
 
-    public function cancel_invoice()
+    public static function cancel_invoice(): void
     {
         check_ajax_referer('cancel-invoice');
 
@@ -76,7 +64,7 @@ final class Ajax
         wp_die();
     }
 
-    public function invalid_invoice()
+    public static function invalid_invoice(): void
     {
         check_ajax_referer('invalid-invoice');
 
